@@ -1,0 +1,114 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f2f3f3;
+}
+#calendar button {
+  cursor: pointer;
+  border: 1px solid #545b64;
+  border-radius: 2px;
+  color: #545b64;
+  padding: 5px 20px;
+  margin: 2px 0px;
+  margin-right: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: white;
+  height: 30px;
+}
+#calendar h3 {
+  margin: 6px 0px;
+}
+#calendar > div:first-child {
+  display: flex;
+  gap: 4px;
+  font-size: 18px;
+}
+#calendar #wrapper {
+  overflow: auto;
+  margin-top: 16px;
+}
+#calendar #grid {
+  display: flex;
+  flex-wrap: wrap;
+  border-top: 1px #ddd solid;
+  border-right: 1px #ddd solid;
+  min-width: 896px;
+  max-width: 1204px;
+}
+#calendar #grid > div {
+  flex: 1 1 calc(14.28% - 2px);
+  border-bottom: 1px #ddd solid;
+  border-left: 1px #ddd solid;
+  min-height: 96px;
+  overflow: hidden;
+}
+#calendar #grid > div > span.date {
+  font-size: 14px;
+  text-align: left;
+  display: inline-block;
+  margin: 6px 5px;
+}
+#calendar #grid > div > span.date.light {
+  color: #ccc;
+}
+#calendar #grid > div > span.date.today {
+  background: #7979ff;
+  margin: 2px;
+  padding: 4px;
+  border-radius: 50%;
+  color: white;
+  text-align: center;
+  width: 16px;
+  box-sizing: content-box;
+}
+#calendar #grid .box {
+  background-color: white;
+}
+#calendar #grid .box.dayofweek {
+  min-height: unset;
+  font-weight: bold;
+  font-size: 12px;
+}
+#calendar #grid .box.dayofweek span {
+  display: block;
+  margin: 5px;
+}
+#calendar #grid .box.selected {
+  background-color: #fcf8e3;
+}
+#calendar .event {
+  text-align: left;
+  padding: 3px 4px;
+  border-radius: 2px;
+  font-size: 12px;
+  color: white;
+  cursor: pointer;
+  white-space: nowrap;
+  margin-top: 2px;
+  color: black;
+}
+#calendar .event:hover {
+  background-color: #eee;
+}
+#calendar .event.free {
+  background-color: #6d6dff;
+  color: white;
+}
+#calendar .event.free:hover {
+  background-color: #5e5ee1;
+}
+#calendar .event.urgent {
+  background-color: #8743ff;
+  color: white;
+}
+#calendar .event.urgent:hover {
+  background-color: #7a3ce4;
+}
+#calendar .event.hidden {
+  display: none;
+}
+@media only screen and (max-width: 600px) {
+  #calendar .event {
+    padding: 5px 4px;
+  }
+}
