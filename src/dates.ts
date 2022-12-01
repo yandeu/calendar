@@ -17,14 +17,7 @@ export const getCurrentCalenderMonth = (offset: number = 0): MonthDate[] => {
   const now = new Date()
 
   // adjust now by month offset
-  let date
-  if (now.getMonth() == 11) {
-    // january next year
-    date = new Date(now.getFullYear() + offset, 0, 1)
-  } else {
-    // next month this year
-    date = new Date(now.getFullYear(), now.getMonth() + offset, 1)
-  }
+  const date = new Date(now.getFullYear(), now.getMonth() + offset, 1)
 
   const dates: MonthDate[] = []
 
