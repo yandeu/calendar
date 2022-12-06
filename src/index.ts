@@ -1,3 +1,4 @@
+import { TIMEZONE } from './config.js'
 import { toYYYYMMDD, getCurrentCalenderMonth, getDayOfWeekName, getMonthName, isToday } from './dates.js'
 import { h, onNodeRemove } from './dom.js'
 import { makeTestEvents } from './testEvents.js'
@@ -122,10 +123,7 @@ export class Calendar {
         const isCurrentMonth = dateTime.getMonth() === currentMonth.getMonth()
         const day = document.querySelector('[data-date="' + toYYYYMMDD(dateTime) + '"]')
         if (day) {
-          const time = dateTime.toLocaleTimeString('fr-DE', {
-            hour: '2-digit',
-            minute: '2-digit'
-          })
+          const time = dateTime.toLocaleTimeString('en-GB', { timeZone: TIMEZONE }).slice(0, 5)
           const summary = e.summary.replace(/^\d{1,2}:\d{1,2}\s/gm, '')
           const event = h('div', null, time + ' ' + summary)
           event.classList.add('event')

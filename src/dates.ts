@@ -1,3 +1,5 @@
+import { TIMEZONE } from './config.js'
+
 interface MonthDate {
   dateTime: Date
   month: string
@@ -5,11 +7,14 @@ interface MonthDate {
 
 /** converts to YYYY-MM-DD */
 export const toYYYYMMDD = (date: Date): string => {
-  const year = date.toLocaleString('default', { year: 'numeric' })
-  const month = date.toLocaleString('default', { month: '2-digit' })
-  const day = date.toLocaleString('default', { day: '2-digit' })
+  return date.toLocaleString('en-GB', { timeZone: TIMEZONE }).slice(0, 10).split('/').reverse().join('-')
 
-  return year + '-' + month + '-' + day
+  // const year = date.toLocaleString('default', { year: 'numeric' })
+  // const month = date.toLocaleString('default', { month: '2-digit' })
+  // const day = date.toLocaleString('default', { day: '2-digit' })
+
+  // console.log(year + '-' + month + '-' + day, d)
+  // return year + '-' + month + '-' + day
 }
 
 export const getCurrentCalenderMonth = (offset: number = 0): MonthDate[] => {
