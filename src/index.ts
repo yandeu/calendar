@@ -38,6 +38,55 @@ export class Calendar {
     return getCurrentCalenderMonth(offset)
   }
 
+  private async addEventsToDOM(events: CalendarEvent[], currentMonth: Date) {
+    const add = (e: CalendarEvent): Promise<void> => {
+      return new Promise(resolve => {
+        // event in day (not whole day)
+        if (e.start.dateTime) {
+          const dateTime = new Date(e.start.dateTime)
+          const isCurrentMonth = dateTime.getMonth() === currentMonth.getMonth()
+          const day = document.querySelector('[data-date="' + toYYYYMMDD(dateTime) + '"]')
+          if (day) {
+            const time = dateTime.toLocaleTimeString('en-GB', { timeZone: TIMEZONE }).slice(0, 5)
+            const summary = e.summary.replace(/^\d{1,2}:\d{1,2}\s/gm, '')
+            const event = h('div', null, time + ' ' + summary)
+            event.classList.add('event')
+            if (!isCurrentMonth) event.classList.add('inactive')
+
+            // color based on summary keywords
+            if (/libre/gim.test(summary)) event.classList.add('free')
+            if (/urgence/gim.test(summary)) event.classList.add('urgent')
+
+            // custom filter
+            const filter = false
+            if (filter) {
+              if (!/libre/gim.test(summary) && !/urgence/gim.test(summary)) event.classList.add('hidden')
+            }
+
+            event.addEventListener('click', f => {
+              f.stopPropagation()
+              this.emitEvent('event', {
+                id: e.id,
+                start: e.start,
+                time,
+                summary,
+                description: e.description,
+                updated: e.updated
+              })
+            })
+            day.append(event)
+          }
+        }
+        resolve()
+      })
+    }
+
+    // add events to calendar
+    for (const e of events) {
+      await add(e)
+    }
+  }
+
   public render(offset: number = 0, events: CalendarEvent[] = []) {
     const c = document.getElementById('calendar')
     if (c) c.remove()
@@ -115,45 +164,7 @@ export class Calendar {
       this.removeEvents()
     })
 
-    // add events to calendar
-    events.forEach(e => {
-      // event in day (not whole day)
-      if (e.start.dateTime) {
-        const dateTime = new Date(e.start.dateTime)
-        const isCurrentMonth = dateTime.getMonth() === currentMonth.getMonth()
-        const day = document.querySelector('[data-date="' + toYYYYMMDD(dateTime) + '"]')
-        if (day) {
-          const time = dateTime.toLocaleTimeString('en-GB', { timeZone: TIMEZONE }).slice(0, 5)
-          const summary = e.summary.replace(/^\d{1,2}:\d{1,2}\s/gm, '')
-          const event = h('div', null, time + ' ' + summary)
-          event.classList.add('event')
-          if (!isCurrentMonth) event.classList.add('inactive')
-
-          // color based on summary keywords
-          if (/libre/gim.test(summary)) event.classList.add('free')
-          if (/urgence/gim.test(summary)) event.classList.add('urgent')
-
-          // custom filter
-          const filter = false
-          if (filter) {
-            if (!/libre/gim.test(summary) && !/urgence/gim.test(summary)) event.classList.add('hidden')
-          }
-
-          event.addEventListener('click', f => {
-            f.stopPropagation()
-            this.emitEvent('event', {
-              id: e.id,
-              start: e.start,
-              time,
-              summary,
-              description: e.description,
-              updated: e.updated
-            })
-          })
-          day.append(event)
-        }
-      }
-    })
+    this.addEventsToDOM(events, currentMonth)
   }
 }
 
