@@ -48,7 +48,7 @@ export class Calendar {
           const day = document.querySelector('[data-date="' + toYYYYMMDD(dateTime) + '"]')
           if (day) {
             const time = dateTime.toLocaleTimeString('en-GB', { timeZone: TIMEZONE }).slice(0, 5)
-            const summary = e.summary.replace(/^\d{1,2}:\d{1,2}\s/gm, '')
+            const summary = e.summary ? e.summary.replace(/^\d{1,2}:\d{1,2}\s/gm, "") : "no title"
             const event = h('div', null, time + ' ' + summary)
             event.classList.add('event')
             if (!isCurrentMonth) event.classList.add('inactive')
@@ -56,6 +56,7 @@ export class Calendar {
             // color based on summary keywords
             if (/libre/gim.test(summary)) event.classList.add('free')
             if (/urgence/gim.test(summary)) event.classList.add('urgent')
+            if (/no title/gim.test(summary)) event.classList.add('error')
 
             // custom filter
             const filter = false
@@ -70,7 +71,7 @@ export class Calendar {
                 start: e.start,
                 time,
                 summary,
-                description: e.description,
+                description: e.description || '',
                 updated: e.updated
               })
             })

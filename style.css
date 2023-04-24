@@ -104,6 +104,14 @@ body {
 #calendar .event.urgent:hover {
   background-color: #7a3ce4;
 }
+#calendar .event.error {
+  background-color: #a5a5a5;
+  color: white;
+}
+#calendar .event.error:hover {
+  background-color: #b1b1b1;
+  color: white;
+}
 #calendar .event.hidden {
   display: none;
 }
