@@ -17,6 +17,7 @@ type CalendarClickEventData<T> = T extends 'event'
   : never
 
 export class Calendar {
+  constructor(public config?: { customColors?: [{ regex: RegExp; color: string }] }) {}
   private eventHandlers: Array<<T extends CalendarClickEventTypes>(type: T, data: CalendarClickEventData<T>) => void> =
     []
 
@@ -48,7 +49,7 @@ export class Calendar {
           const day = document.querySelector('[data-date="' + toYYYYMMDD(dateTime) + '"]')
           if (day) {
             const time = dateTime.toLocaleTimeString('en-GB', { timeZone: TIMEZONE }).slice(0, 5)
-            const summary = e.summary ? e.summary.replace(/^\d{1,2}:\d{1,2}\s/gm, "") : "no title"
+            const summary = e.summary ? e.summary.replace(/^\d{1,2}:\d{1,2}\s/gm, '') : 'no title'
             const event = h('div', null, time + ' ' + summary)
             event.classList.add('event')
             if (!isCurrentMonth) event.classList.add('inactive')
@@ -57,6 +58,12 @@ export class Calendar {
             if (/libre/gim.test(summary)) event.classList.add('free')
             if (/urgence/gim.test(summary)) event.classList.add('urgent')
             if (/no title/gim.test(summary)) event.classList.add('error')
+
+            this.config?.customColors?.forEach(c => {
+              if (new RegExp(c.regex).test(summary)) {
+                event.style.backgroundColor = c.color
+              }
+            })
 
             // custom filter
             const filter = false
@@ -171,7 +178,7 @@ export class Calendar {
 
 export const example = async () => {
   const events = makeTestEvents()
-  const calendar = new Calendar()
+  const calendar = new Calendar({ customColors: [{ regex: /libre/gim, color: '#6d6dff' }] })
 
   const days = calendar.getCurrentCalenderMonth(0)
 
