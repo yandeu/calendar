@@ -17,7 +17,7 @@ type CalendarClickEventData<T> = T extends 'event'
   : never
 
 export class Calendar {
-  constructor(public config?: { customColors?: [{ regex: RegExp; color: string }] }) {}
+  constructor(public config?: { customColors?: [{ regex: RegExp; bg: string; color: string }] }) {}
   private eventHandlers: Array<<T extends CalendarClickEventTypes>(type: T, data: CalendarClickEventData<T>) => void> =
     []
 
@@ -61,7 +61,8 @@ export class Calendar {
 
             this.config?.customColors?.forEach(c => {
               if (new RegExp(c.regex).test(summary)) {
-                event.style.backgroundColor = c.color
+                event.style.backgroundColor = c.bg
+                event.style.color = c.color
               }
             })
 
@@ -178,7 +179,7 @@ export class Calendar {
 
 export const example = async () => {
   const events = makeTestEvents()
-  const calendar = new Calendar({ customColors: [{ regex: /libre/gim, color: '#6d6dff' }] })
+  const calendar = new Calendar({ customColors: [{ regex: /libre/gim, bg: '#6d6dff', color: 'white' }] })
 
   const days = calendar.getCurrentCalenderMonth(0)
 
